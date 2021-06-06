@@ -44,6 +44,8 @@ const fader = color => d3.interpolateRgb(color, '#fff')(0.2),
 color = d3.scaleOrdinal(d3.schemeCategory20.map(fader)),
 treemap = d3.treemap().size([width, height]).paddingInner(1);
 
+const sumBySize = d => d.value;
+
 d3.json(DATASET.FILE_PATH, function (error, data) {
     if (error) throw error;
     
