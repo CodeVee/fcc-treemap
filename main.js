@@ -24,3 +24,14 @@ const DATASETS = {
 const urlParams = new URLSearchParams(window.location.search),
 DEFAULT_DATASET = 'videogames',
 DATASET = DATASETS[urlParams.get('data') || DEFAULT_DATASET];
+
+document.getElementById('title').innerHTML = DATASET.TITLE;
+document.getElementById('description').innerHTML = DATASET.DESCRIPTION;
+
+const body = d3.select('body');
+
+const tooltip = body
+  .append('div')
+  .attr('class', 'tooltip')
+  .attr('id', 'tooltip')
+  .style('opacity', 0);
