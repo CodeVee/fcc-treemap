@@ -65,30 +65,15 @@ d3.json(DATASET.FILE_PATH, function (error, data) {
   
     cell
       .append('rect')
-      .attr('id', function (d) {
-        return d.data.id;
-      })
+      .attr('id', d => d.data.id)
       .attr('class', 'tile')
-      .attr('width', function (d) {
-        return d.x1 - d.x0;
-      })
-      .attr('height', function (d) {
-        return d.y1 - d.y0;
-      })
-      .attr('data-name', function (d) {
-        return d.data.name;
-      })
-      .attr('data-category', function (d) {
-        return d.data.category;
-      })
-      .attr('data-value', function (d) {
-        return d.data.value;
-      })
-      .attr('fill', function (d) {
-        return color(d.data.category);
-      })
-      .on('mousemove', function (d) {
-        console.log('mouseover');
+      .attr('width', d => d.x1 - d.x0)
+      .attr('height', d => d.y1 - d.y0)
+      .attr('data-name', d => d.data.name)
+      .attr('data-category', d => d.data.category)
+      .attr('data-value', d => d.data.value)
+      .attr('fill', d => color(d.data.category))
+      .on('mousemove', d => {
         tooltip.style('opacity', 0.9);
         tooltip
           .html(
@@ -103,35 +88,23 @@ d3.json(DATASET.FILE_PATH, function (error, data) {
           .style('left', d3.event.pageX + 10 + 'px')
           .style('top', d3.event.pageY - 28 + 'px');
       })
-      .on('mouseout', function () {
-        tooltip.style('opacity', 0);
-      });
+      .on('mouseout', () => tooltip.style('opacity', 0));
   
     cell
       .append('text')
       .attr('class', 'tile-text')
       .selectAll('tspan')
-      .data(function (d) {
-        return d.data.name.split(/(?=[A-Z][^A-Z])/g);
-      })
+      .data(d => d.data.name.split(/(?=[A-Z][^A-Z])/g))
       .enter()
       .append('tspan')
       .attr('x', 4)
-      .attr('y', function (d, i) {
-        return 13 + i * 10;
-      })
-      .text(function (d) {
-        return d;
-      });
+      .attr('y', (d, i) =>  13 + i * 10)
+      .text(d  => d);
   
-    var categories = root.leaves().map(function (nodes) {
-      return nodes.data.category;
-    });
-    categories = categories.filter(function (category, index, self) {
-      return self.indexOf(category) === index;
-    });
-    var legend = d3.select('#legend');
-    var legendWidth = +legend.attr('width');
+    let categories = root.leaves().map(nodes => nodes.data.category);
+    categories = categories.filter((category, index, self) => self.indexOf(category) === index);
+    const legend = d3.select('#legend');
+    const legendWidth = +legend.attr('width');
     const LEGEND_OFFSET = 10;
     const LEGEND_RECT_SIZE = 15;
     const LEGEND_H_SPACING = 150;
@@ -140,22 +113,18 @@ d3.json(DATASET.FILE_PATH, function (error, data) {
     const LEGEND_TEXT_Y_OFFSET = -2;
     var legendElemsPerRow = Math.floor(legendWidth / LEGEND_H_SPACING);
   
-    var legendElem = legend
+    const legendElem = legend
       .append('g')
       .attr('transform', 'translate(60,' + LEGEND_OFFSET + ')')
       .selectAll('g')
       .data(categories)
       .enter()
       .append('g')
-      .attr('transform', function (d, i) {
-        return (
-          'translate(' +
-          (i % legendElemsPerRow) * LEGEND_H_SPACING +
-          ',' +
-          (Math.floor(i / legendElemsPerRow) * LEGEND_RECT_SIZE +
-            LEGEND_V_SPACING * Math.floor(i / legendElemsPerRow)) +
-          ')'
-        );
+      .attr('transform', (d, i) => {
+        return `
+        translate(${(i % legendElemsPerRow) * LEGEND_H_SPACING}, ${Math.floor(i / legendElemsPerRow) * LEGEND_RECT_SIZE +
+            LEGEND_V_SPACING * Math.floor(i / legendElemsPerRow)})
+        ` 
       });
   
     legendElem
@@ -163,19 +132,11 @@ d3.json(DATASET.FILE_PATH, function (error, data) {
       .attr('width', LEGEND_RECT_SIZE)
       .attr('height', LEGEND_RECT_SIZE)
       .attr('class', 'legend-item')
-      .attr('fill', function (d) {
-        return color(d);
-      });
+      .attr('fill', d => color(d));
   
     legendElem
       .append('text')
       .attr('x', LEGEND_RECT_SIZE + LEGEND_TEXT_X_OFFSET)
       .attr('y', LEGEND_RECT_SIZE + LEGEND_TEXT_Y_OFFSET)
-      .text(function (d) {
-        return d;
-      });
+      .text(d =>  d);
   });
-  
-  function sumBySize(d) {
-    return d.value;
-  }
