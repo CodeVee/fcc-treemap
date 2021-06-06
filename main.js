@@ -40,7 +40,6 @@ const svg = d3.select('#tree-map'),
   width = +svg.attr('width'),
   height = +svg.attr('height');
 
-const fader = function (color) {
-    return d3.interpolateRgb(color, '#fff')(0.2);
-  },
-color = d3.scaleOrdinal(d3.schemeCategory20.map(fader));
+const fader = color => d3.interpolateRgb(color, '#fff')(0.2),
+color = d3.scaleOrdinal(d3.schemeCategory20.map(fader)),
+treemap = d3.treemap().size([width, height]).paddingInner(1);
